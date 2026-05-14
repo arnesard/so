@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        @font-face {
+            font-family: "Libre Barcode 39";
+            src: local("Libre Barcode 39");
+            /* fallback untuk ngetes lokal */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            font-family: "Times New Roman", serif;
+        }
+
+        .page-break {
+            page-break-after: always;
+            padding: 15px 0 0 0;
+            box-sizing: border-box;
+            height: 100vh;
+        }
+
+        .kartu-table {
+            width: 100%;
+            height: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 13px;
+        }
+
+        .header-area {
+            text-align: center;
+            position: relative;
+        }
+
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .tanggal {
+            font-size: 11px;
+            margin-top: -2px;
+        }
+
+        .grade {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .barcode-box {
+            position: absolute;
+            top: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .barcode-title {
+            font-size: 10px;
+        }
+
+        .barcode {
+            font-family: "Libre Barcode 39", monospace;
+            font-size: 28px;
+            line-height: 1;
+            font-weight: normal;
+        }
+
+        .barcode-text {
+            font-size: 13px;
+            margin-top: -2px;
+        }
+
+        .left-text {
+            padding-left: 5px;
+        }
+
+        .desc {
+            padding-left: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .item-barcode {
+            font-family: "Libre Barcode 39", monospace;
+            font-size: 32px;
+            padding-left: 5px;
+            line-height: 1;
+        }
+
+        .item-text {
+            padding-left: 5px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .right-label {
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .right-value {}
+
+        .right-value span {
+            display: inline-block;
+            width: 100px;
+            border-bottom: 1px solid #000;
+        }
+
+        .line-number {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .digit-row td {
+            vertical-align: middle;
+        }
+
+        .digit-container {
+            display: flex;
+            justify-content: space-between;
+            padding-right: 20px;
+        }
+
+        .digit {
+            width: 14px;
+            height: 14px;
+            text-align: center;
+            position: relative;
+            font-size: 12px;
+            line-height: 14px;
+            font-weight: 700;
+            -webkit-text-stroke: 0.3px #000;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            background: transparent;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .qty-barcode {
+            font-family: "Libre Barcode 39", monospace;
+            font-size: 23px;
+            margin-left: 8px;
+            position: relative;
+            top: 3px;
+        }
+
+        .section-line {
+            border-bottom: 2px solid #000;
+        }
+
+        .section-label {
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        .ttd-title {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .ttd-space {
+            height: 100px;
+            vertical-align: bottom;
+            text-align: center;
+        }
+
+        .ttd-line div {
+            width: 60%;
+            margin: 0 auto;
+            border-top: 2px solid #000;
+            text-align: center;
+        }
+
+        .gunting img {
+            width: 100%;
+            height: 20px;
+            margin-top: 5px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .kartu-table {
+            page-break-inside: avoid;
+        }
+
+        tr {
+            page-break-inside: avoid !important;
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+
+            html,
+            body {
+                overflow: visible !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .page-break {
+                page-break-after: always;
+                position: relative;
+            }
+
+            .dot {
+                background: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-break">
+        <table class="kartu-table">
+            <tr>
+                <td colspan="6" class="header-area">
+                    <div class="title">KARTU STOCK OPNAME</div>
+                    <div class="tanggal">TANGGAL : 15 / JUNI / 2026</div>
+                    <div class="grade">OE</div>
+                    <div class="barcode-box">
+                        <div class="barcode-title">KODE DOKUMEN & NO. DOC</div>
+                        <div class="barcode">*DOC12345*</div>
+                        <div class="barcode-text">DOC12345</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="left-text">PT GAJAH TUNGGAL Tbk</td>
+                <td class="right-label">BARANG MILIK PLANT</td>
+                <td class="right-value"><span>: <b>B</b></span></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="desc"><b>BAN LUAR MANTAP UKURAN 15</b></td>
+                <td class="right-label">NO. DOCUMENT</td>
+                <td class="right-value"><span>: <b>DOC12345</b></span></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="item-barcode">*ITEM999*</td>
+                <td class="right-label top">NO. INDEX</td>
+                <td class="right-value"><span>:</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="item-text">ITEM999</td>
+                <td colspan="2" class="line-number">LINE NUMBER</td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">GRADE</td>
+                <td colspan="3">: <b>OE</b> &nbsp;&nbsp; PLANT : <b>B</b></td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit"><span class="dot"></span>3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">JENIS</td>
+                <td colspan="3">: &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit"><span class="dot"></span>9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">UKURAN</td>
+                <td colspan="3">: <b>BAN LUAR MANTAP UKURAN 15</b> &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">CODE</td>
+                <td colspan="3">: <b>ITEM999</b> &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">JUMLAH</td>
+                <td colspan="3">: <b>150 PCS</b><span class="qty-barcode">*1500*</span> &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit"><span class="dot"></span>0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="section-line">
+                <td colspan="4"></td>
+                <td colspan="2" class="section-label">LEMBAR UNTUK GUDANG</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ttd-title">DIHITUNG OLEH</td>
+                <td colspan="2"></td>
+                <td colspan="2" class="ttd-title">DIPERIKSA OLEH</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ttd-space"><b>Budianto</b></td>
+                <td colspan="2"></td>
+                <td colspan="2" class="ttd-space"><b>..........</b></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ttd-line">
+                    <div>GUDANG BAN</div>
+                </td>
+                <td colspan="2"></td>
+                <td colspan="2" class="ttd-line">
+                    <div>TEAM S.O./AUDITOR</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="gunting">
+                    <hr style="border:1px dashed #000; width:100%;">
+                </td>
+            </tr>
+            <!-- LEMBAR ARSIP -->
+            <tr>
+                <td colspan="6" class="header-area" style="padding-top:20px;">
+                    <div class="title">KARTU STOCK OPNAME</div>
+                    <div class="tanggal">TANGGAL : 15 / JUNI / 2026</div>
+                    <div class="grade">OE</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="left-text">PT GAJAH TUNGGAL Tbk</td>
+                <td class="right-label">BARANG MILIK PLANT</td>
+                <td class="right-value"><span>: <b>B</b></span></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="desc"><b>BAN LUAR MANTAP UKURAN 15</b></td>
+                <td class="right-label">NO. DOCUMENT</td>
+                <td class="right-value"><span>: <b>DOC12345</b></span></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="item-barcode"></td>
+                <td class="right-label top">NO. INDEX</td>
+                <td class="right-value"><span>:</span></td>
+            </tr>
+            <tr>
+                <td colspan="4" class="item-text">ITEM999</td>
+                <td colspan="2" class="line-number">LINE NUMBER</td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">GRADE</td>
+                <td colspan="3">: <b>OE</b> &nbsp;&nbsp; PLANT : <b>B</b></td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit"><span class="dot"></span>3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">JENIS</td>
+                <td colspan="3">: &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit"><span class="dot"></span>9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">UKURAN</td>
+                <td colspan="3">: <b>BAN LUAR MANTAP UKURAN 15</b> &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">CODE</td>
+                <td colspan="3">: <b>ITEM999</b> &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit">0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="digit-row">
+                <td style="padding-left:5px;">JUMLAH</td>
+                <td colspan="3">: <b>150 PCS</b> &nbsp;&nbsp; </td>
+                <td colspan="2">
+                    <div class="digit-container">
+                        <div class="digit">1</div>
+                        <div class="digit">2</div>
+                        <div class="digit">3</div>
+                        <div class="digit">4</div>
+                        <div class="digit">5</div>
+                        <div class="digit">6</div>
+                        <div class="digit">7</div>
+                        <div class="digit">8</div>
+                        <div class="digit">9</div>
+                        <div class="digit"><span class="dot"></span>0</div>
+                    </div>
+                </td>
+            </tr>
+            <tr class="section-line">
+                <td colspan="4"></td>
+                <td colspan="2" class="section-label">LEMBAR UNTUK ARSIP</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ttd-title">DIHITUNG OLEH</td>
+                <td colspan="2"></td>
+                <td colspan="2" class="ttd-title">DIPERIKSA OLEH</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ttd-space"><b>Budianto</b></td>
+                <td colspan="2"></td>
+                <td colspan="2" class="ttd-space"><b>..........</b></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ttd-line">
+                    <div>GUDANG BAN</div>
+                </td>
+                <td colspan="2"></td>
+                <td colspan="2" class="ttd-line">
+                    <div>TEAM S.O./AUDITOR</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
